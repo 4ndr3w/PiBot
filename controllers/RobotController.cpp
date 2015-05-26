@@ -4,6 +4,7 @@
 #include "BrickController.h"
 #include "JoystickDriveController.h"
 #include "PositionController.h"
+#include "PixyController.h"
 
 Controller* Controller::controllers[NCONTROLLERS] = {0};
 
@@ -19,6 +20,7 @@ void Controller::init()
     controllers[GENERIC_CONTROLLER] = new BrickController();
     controllers[POSITION_CONTROLLER] = new PositionController();
     controllers[JOYSTICKDRIVE_CONTROLLER] = new JoystickDriveController();
+    controllers[PIXY_CONTROLLER] = new PixyController();
 }
 
 Controller::Controller()

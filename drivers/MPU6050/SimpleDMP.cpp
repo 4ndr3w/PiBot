@@ -42,6 +42,10 @@ void DMPInit()
       printf("DMP Initialization failed\n");
   }
   createTimedThread(DMPupdate);
+  printf("waiting for DMP init... ");
+  fflush(stdout);
+  while (!dmpFinishedInit) usleep(100000);
+  printf("ready\n");
 }
 
 void DMPupdate(double dT)
@@ -65,19 +69,22 @@ void DMPupdate(double dT)
       mpu.dmpGetQuaternion(&q, fifoBuffer);
       mpu.dmpGetGravity(&gravity, &q);
       mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+      ypr[0] = ypr[0]*180/M_PI;
 
       if ( !dmpFinishedInit )
       {
         double delta = ypr[0]-dmpLastValue;
-
         if ( fabs(delta) < 0.01 )
         {
+            printf("CAL FINISHED\n");
           dmpFinishedInit = true;
           dmpZero = ypr[0];
         }
         dmpLastValue = ypr[0];
       }
-      else
-        yaw = ypr[0]-dmpZero;
+      else {
+          yaw = ypr[0] - dmpZero;
+      }
+
   }
 }

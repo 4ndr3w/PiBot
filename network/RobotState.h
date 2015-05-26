@@ -14,11 +14,8 @@ struct RequestedState
 
 struct RobotState
 {
-    float x;
-    float y;
-    floatbit gyro;
-
-    time_t lastUpdate;
+    int x;
+    int y;
 };
 
 #endif //ROBOTSTATE_H

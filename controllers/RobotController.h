@@ -7,10 +7,11 @@
 #include <stdint.h>
 #include "../robot/Drivetrain.h"
 
-#define NCONTROLLERS 3
+#define NCONTROLLERS 4
 #define GENERIC_CONTROLLER 0
 #define POSITION_CONTROLLER 1
 #define JOYSTICKDRIVE_CONTROLLER 2
+#define PIXY_CONTROLLER 3
 
 
 struct ControllerParams

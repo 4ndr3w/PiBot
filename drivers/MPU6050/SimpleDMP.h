@@ -2,6 +2,6 @@
 #define SimpleDMP_h
 
 void DMPInit();
-void getRotation();
+float getAngle();
 
 #endif

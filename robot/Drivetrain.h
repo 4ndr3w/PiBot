@@ -7,6 +7,18 @@
 
 #include <pthread.h>
 
+#define ENC1_A 0
+#define ENC1_B 1
+
+#define ENC2_A 2
+#define ENC2_B 3
+
+#define ENC3_A 4
+#define ENC3_B 5
+
+#define ENC4_A 6
+#define ENC4_B 7
+
 enum DrivetrainMotor
 {
     LEFT = 15,
@@ -29,6 +41,7 @@ class Drivetrain
     Drivetrain();
     static Drivetrain* instance;
     int encoders[4];
+    void startThread();
 public:
     static Drivetrain* getDrivetrain();
     void setMotor(DrivetrainMotor motor, double speed);

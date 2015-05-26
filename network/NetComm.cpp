@@ -5,6 +5,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <time.h>
+#include <stdio.h>
 
 RobotState robotState;
 RequestedState requestedState;
@@ -22,9 +23,9 @@ void* networkThread(void* n)
         socklen_t len = sizeof(sockaddr);
         RequestedState buf;
         recvfrom(sock, &buf, sizeof(RequestedState), 0, &ds_target, &len);
+        printf("packet\n");
         lockState();
         memcpy(&requestedState, &buf, sizeof(RequestedState));
-        robotState.lastUpdate = time(NULL);
         sendto(sock, &robotState, sizeof(RobotState), 0, &ds_target, len);
         unlockState();
     }
@@ -40,7 +41,7 @@ void initNetComm()
     bindaddr.sin_family = AF_INET;
     bindaddr.sin_port = htons(1337);
     bindaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-++
+
     assert(bind(sock, (sockaddr*)&bindaddr, sizeof(sockaddr_in)) != -1);
     pthread_create(&netThread, NULL, networkThread, NULL);
     pthread_mutex_init(&stateLock, NULL);
