@@ -4,9 +4,10 @@
 
 #ifndef PICONTROLLER_DRIVETRAIN_H
 #define PICONTROLLER_DRIVETRAIN_H
-
+class Controller;
+#include <wiringPi.h>
 #include <pthread.h>
-
+#include "../controllers/RobotController.h"
 #define ENC1_A 0
 #define ENC1_B 1
 
@@ -27,27 +28,20 @@ enum DrivetrainMotor
     BACK = 14
 };
 
-enum DrivetrainEncoder
-{
-    LEFT_ENC,
-    RIGHT_ENC,
-    FRONT_ENC,
-    BACK_ENC
-};
-
 class Drivetrain
 {
     pthread_t pthread;
+    Controller *activeController;
     Drivetrain();
     static Drivetrain* instance;
-    int encoders[4];
+    int encoders[4] = {0};
     void startThread();
 public:
     static Drivetrain* getDrivetrain();
     void setMotor(DrivetrainMotor motor, double speed);
     void drive(double y, double x, double twist);
-    void encoderTick(DrivetrainEncoder, bool);
-
+    void encoderTick(int, bool);
+    int getEncoder(int);
     void update(double dT);
 
 

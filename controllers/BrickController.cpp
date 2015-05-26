@@ -7,7 +7,6 @@ BrickController::BrickController() {
 
 }
 
-void BrickController::update(ControllerParams *input, Drivetrain *drivetrain) {
-    assert(input->type == GENERIC_CONTROLLER);
+void BrickController::update(Drivetrain *drivetrain) {
     drivetrain->drive(0,0,0);
 }

@@ -20,7 +20,7 @@ struct PixyControllerParams
 class PixyController : public Controller {
 public:
     PixyController();
-    void update(ControllerParams* params, Drivetrain* drivetrain);
+    void update(Drivetrain* drivetrain);
 
 };
 

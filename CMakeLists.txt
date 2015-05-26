@@ -12,12 +12,11 @@ add_definitions(-D__LIBPIXY_VERSION__="${LIBPIXY_VERSION}")
 
 set(SOURCE_FILES main.cpp)
 set(DRIVER_SOURCE_FILES drivers/PWM.cpp drivers/MPU6050/MPU6050.cpp drivers/MPU6050/SimpleDMP.cpp drivers/MPU6050/I2Cdev.cpp)
-set(NETWORK_SOURCE_FILES network/NetComm.cpp)
 set(CONTROLLER_SOURCE_FILES controllers/RobotController.cpp controllers/PositionController.cpp controllers/BrickController.cpp controllers/PixyController.cpp)
 set(VISION_SOURCE_FILES vision/pixy.cpp)
 set(OTHER_SOURCES timing/TimedThread.cpp robot/Drivetrain.cpp controllers/JoystickDriveController.cpp)
 
-add_executable(PiController ${SOURCE_FILES} ${DRIVER_SOURCE_FILES} ${NETWORK_SOURCE_FILES} ${CONTROLLER_SOURCE_FILES} ${VISION_SOURCE_FILES} ${OTHER_SOURCES})
+add_executable(PiController ${SOURCE_FILES} ${DRIVER_SOURCE_FILES} ${CONTROLLER_SOURCE_FILES} ${VISION_SOURCE_FILES} ${OTHER_SOURCES})
 target_link_libraries(PiController -pthread -lm -lwiringPi)
 target_link_libraries(PiController pixyusb)
 target_link_libraries (PiController ${Boost_LIBRARIES})

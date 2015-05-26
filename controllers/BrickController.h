@@ -7,7 +7,7 @@
 class BrickController : public Controller {
 public:
     BrickController();
-    void update(ControllerParams* params, Drivetrain* drivetrain);
+    void update(Drivetrain* drivetrain);
 
 };
 

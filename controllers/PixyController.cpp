@@ -5,11 +5,8 @@ PixyController::PixyController()
 
 }
 
-void PixyController::update(ControllerParams* input, Drivetrain* drivetrain)
+void PixyController::update(Drivetrain* drivetrain)
 {
-    assert(input->type == PIXY_CONTROLLER);
-    PixyControllerParams *params = (PixyControllerParams*)input;
-
    pixyLockBlocks();
    Block *block = pixyGetBlocks();
    Block *selectedBlock = 0;

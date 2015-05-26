@@ -7,7 +7,7 @@
 ProfileFollowerController::ProfileFollowerController() {
 }
 
-void ProfileFollowerController::update(ControllerParams * params, Drivetrain * drivetrain)
+void ProfileFollowerController::update(Drivetrain * drivetrain)
 {
 
 }

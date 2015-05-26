@@ -7,7 +7,6 @@
 #include <pixy.h>
 #include "pixy.h"
 #include "../timing/TimedThread.h"
-#include "../network/NetComm.h"
 
 Block blocks[PIXY_MAX_BLOCKS];
 

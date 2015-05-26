@@ -4,19 +4,10 @@
 #include <stdint.h>
 #include "RobotController.h"
 
-struct JoystickDriveControllerParams
-{
-    int8_t type;
-    int8_t fwd;
-    int8_t strafe;
-    int8_t twist;
-    char data[253];
-};
-
 class JoystickDriveController : public Controller {
 public:
     JoystickDriveController();
-    void update(ControllerParams* params, Drivetrain* drivetrain);
+    void update(Drivetrain* drivetrain);
 
 };
 

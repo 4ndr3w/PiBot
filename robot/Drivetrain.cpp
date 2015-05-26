@@ -1,6 +1,5 @@
 #include "Drivetrain.h"
 #include "../timing/TimedThread.h"
-#include "../network/NetComm.h"
 #include "../drivers/PWM.h"
 #include <stdio.h>
 
@@ -20,22 +19,35 @@ Drivetrain* Drivetrain::getDrivetrain()
 
 void enc1ISR()
 {
-    Drivetrain::getDrivetrain()->encoderTick(0, true);
+    if ( digitalRead(ENC1_B) )
+        Drivetrain::getDrivetrain()->encoderTick(0, true);
+    else
+        Drivetrain::getDrivetrain()->encoderTick(0, false);
 }
 
 void enc2ISR()
 {
-    Drivetrain::getDrivetrain()->encoderTick(1, true);
+    if ( digitalRead(ENC2_B) )
+        Drivetrain::getDrivetrain()->encoderTick(1, true);
+    else
+        Drivetrain::getDrivetrain()->encoderTick(1, false);
 }
 
 void enc3ISR()
 {
-    Drivetrain::getDrivetrain()->encoderTick(2, true);
+    if ( digitalRead(ENC3_B) )
+        Drivetrain::getDrivetrain()->encoderTick(2, true);
+    else
+        Drivetrain::getDrivetrain()->encoderTick(2, false);
 }
 
 void enc4ISR()
 {
-    Drivetrain::getDrivetrain()->encoderTick(3, true);
+    if ( digitalRead(ENC4_B) )
+        Drivetrain::getDrivetrain()->encoderTick(3, true);
+    else
+        Drivetrain::getDrivetrain()->encoderTick(3, false);
+
 }
 
 
@@ -51,19 +63,19 @@ Drivetrain::Drivetrain()
     // encoder 2
     pinMode(ENC2_A, INPUT);
     pinMode(ENC2_B, INPUT);
-    wiringPiISR(ENC2_A, INT_EDGE_RISING, &countEncoder2);
+    wiringPiISR(ENC2_A, INT_EDGE_RISING, &enc2ISR);
 
     // encoder 3
     pinMode(ENC3_A, INPUT);
     pinMode(ENC3_B, INPUT);
-    wiringPiISR(ENC3_A, INT_EDGE_RISING, &countEncoder3);
+    wiringPiISR(ENC3_A, INT_EDGE_RISING, &enc3ISR);
 
     // encoder 4
     pinMode(ENC4_A, INPUT);
     pinMode(ENC4_B, INPUT);
-    wiringPiISR(ENC4_A, INT_EDGE_RISING, &countEncoder4);
+    wiringPiISR(ENC4_A, INT_EDGE_RISING, &enc4ISR);
 
-
+    activeController = NULL;
 }
 
 
@@ -75,12 +87,10 @@ void Drivetrain::startThread()
 
 void Drivetrain::update(double dT)
 {
-    lockState();
-    RequestedState* state = getRequestedState();
-    RobotState* robot = getRobotState();
-    //printf("drivetrain update - controller %i\n", state->controller.type);
-    Controller::getController(state->controller.type)->update(&state->controller, this);
-    unlockState();
+    if ( activeController != 0 )
+        activeController->update(this);
+    else
+        drive(0,0,0);
 }
 
 
@@ -103,12 +113,17 @@ void Drivetrain::drive(double y, double x, double twist) {
     setMotor(BACK, -x-twist);
 }
 
-void Drivetrain::encoderTick(DrivetrainEncoder enc, bool forward)
+void Drivetrain::encoderTick(int enc, bool forward)
 {
     if ( forward )
         encoders[enc]++;
     else
         encoders[enc]--;
+}
+
+int Drivetrain::getEncoder(int enc)
+{
+    return encoders[enc];
 }
 
 
