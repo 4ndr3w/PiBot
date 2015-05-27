@@ -4,6 +4,14 @@
 
 #include "ProfileFollower.h"
 
+struct ProfilePoint {
+    double t;
+    double pos;
+    double vel;
+    double acc;
+};
+
+
 ProfileFollowerController::ProfileFollowerController() {
 }
 

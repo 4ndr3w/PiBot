@@ -24,6 +24,8 @@ enum PWMConstant {
 
     __RESTART            = 0x80,
     __SLEEP              = 0x10,
+
+
     __ALLCALL            = 0x01,
     __INVRT              = 0x10,
     __OUTDRV             = 0x04,

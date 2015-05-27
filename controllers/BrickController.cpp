@@ -8,5 +8,5 @@ BrickController::BrickController() {
 }
 
 void BrickController::update(Drivetrain *drivetrain) {
-    drivetrain->drive(0,0,0);
+    //drivetrain->drive(0,0,0);
 }

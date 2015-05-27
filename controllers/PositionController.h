@@ -9,10 +9,13 @@
 #include "RobotController.h"
 #include "../robot/Drivetrain.h"
 
-class PositionController : public Controller {
+class PositionController : public Controller
+{
+    int targetX, targetY;
 public:
     PositionController();
     void update(Drivetrain* drivetrain);
+    void setTarget(double x, double y);
 
 };
 

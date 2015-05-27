@@ -1,6 +1,8 @@
 #include "Drivetrain.h"
 #include "../timing/TimedThread.h"
 #include "../drivers/PWM.h"
+#include "../drivers/MPU6050/SimpleDMP.h"
+#include <math.h>
 #include <stdio.h>
 
 void drivetrainUpdateThread(double dT);
@@ -53,8 +55,6 @@ void enc4ISR()
 
 Drivetrain::Drivetrain()
 {
-    printf("drivetrain init~\n");
-
     // encoder 1
     pinMode(ENC1_A, INPUT);
     pinMode(ENC1_B, INPUT);
@@ -84,9 +84,32 @@ void Drivetrain::startThread()
     createTimedThread(drivetrainUpdateThread);
 }
 
+void Drivetrain::setActiveController(Controller *controller)
+{
+    activeController = controller;
+}
+
 
 void Drivetrain::update(double dT)
 {
+    static double lastEncoder[4] = {0};
+
+    double yDiff = ((getEncoder(LEFT_ENC)-lastEncoder[LEFT_ENC])+(getEncoder(RIGHT_ENC)-lastEncoder[RIGHT_ENC]))/2;
+    double xDiff = ((getEncoder(FRONT_ENC)-lastEncoder[FRONT_ENC])+(getEncoder(BACK_ENC)-lastEncoder[BACK_ENC]))/2;
+    double sinAngle = sin(getAngle()*(M_PI/180));
+    double cosAngle = cos(getAngle()*(M_PI/180));
+
+    yPos += (yDiff*cosAngle)+(xDiff*sinAngle);
+    xPos += (yDiff*sinAngle)+(xDiff*cosAngle);
+
+    /*printf("diff(%2.4f, %2.4f) SinCos(%2.2f,%2.2f) pos(%2.4f,%2.4f)\n",
+           xDiff, yDiff,
+           sinAngle, cosAngle,
+           xPos, yPos);*/
+    for ( int i = 0; i < 4; i++ )
+    {
+        lastEncoder[i] = getEncoder((DriveEncoder) i);
+    }
     if ( activeController != 0 )
         activeController->update(this);
     else
@@ -106,11 +129,11 @@ void Drivetrain::setMotor(DrivetrainMotor motor, double speed)
 
 void Drivetrain::drive(double y, double x, double twist) {
    // printf("drive set %2.4f %2.4f %2.4f\n", y ,x, twist);
-    setMotor(LEFT, -y+twist);
-    setMotor(RIGHT, -y-twist);
+    setMotor(LEFT, y+twist);
+    setMotor(RIGHT, -y+twist);
 
-    setMotor(FRONT, x-twist);
-    setMotor(BACK, -x-twist);
+    setMotor(FRONT, -x-twist);
+    setMotor(BACK, -x+twist);
 }
 
 void Drivetrain::encoderTick(int enc, bool forward)
@@ -121,11 +144,21 @@ void Drivetrain::encoderTick(int enc, bool forward)
         encoders[enc]--;
 }
 
-int Drivetrain::getEncoder(int enc)
+double Drivetrain::getEncoder(DriveEncoder enc)
 {
-    return encoders[enc];
+    double dist = encoders[enc]/280.0;
+    return dist*(M_PI*4);
 }
 
+double Drivetrain::getY()
+{
+    return yPos;
+}
+
+double Drivetrain::getX()
+{
+    return xPos;
+}
 
 void drivetrainUpdateThread(double dT)
 {

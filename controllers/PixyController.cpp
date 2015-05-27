@@ -22,9 +22,11 @@ void PixyController::update(Drivetrain* drivetrain)
 
     if ( selectedBlock != 0 ) {
 
-        double p = (selectedBlock->x-150)*0.001;
-        printf("x: %i, size %i, d %2.4f\n", selectedBlock->x, selectedBlock->height*selectedBlock->width, p);
-        drivetrain->drive(0,p,0);
+        double p = (selectedBlock->x-150)*0.005;
+        int area = selectedBlock->height*selectedBlock->width;
+        double dist = (4000-area)/10000.0;
+        printf("x: %i, size %i, d %2.4f, y %2.4f\n", selectedBlock->x, selectedBlock->height*selectedBlock->width, p, dist);
+        drivetrain->drive(dist,0,p);
     }
     else{
         printf("no object found!\n");
