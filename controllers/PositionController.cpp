@@ -19,7 +19,7 @@ void PositionController::setTarget(double x, double y)
 }
 
 void PositionController::update(Drivetrain *drivetrain) {
-    double twist = -getAngle()*0.05;
+    double twist = -getAngle()*0.038;
 
     double yDist = targetY-drivetrain->getY();
     double xDist = targetX-drivetrain->getX();
