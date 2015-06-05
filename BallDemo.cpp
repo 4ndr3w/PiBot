@@ -4,7 +4,7 @@
 #include "controllers/PixyController.h"
 
 int main() {
-    robotInit();
+    robotInit(false, true, false);
     Drivetrain *drive = Drivetrain::getDrivetrain(); // start driving thread
 
     PixyController* pixy = new PixyController();

@@ -8,6 +8,6 @@
 #include "drivers/MPU6050/SimpleDMP.h"
 #include "robot/Drivetrain.h"
 
-void robotInit();
+void robotInit(bool initGyro = true, bool initLIDAR = true, bool initPixy = false);
 
 #endif

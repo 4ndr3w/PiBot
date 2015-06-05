@@ -5,7 +5,7 @@
 #include "controllers/PositionController.h"
 
 int main() {
-    robotInit();
+    robotInit(true, false, false);
     Drivetrain *drive = Drivetrain::getDrivetrain(); // start driving thread
 
     PositionController* posController = new PositionController();

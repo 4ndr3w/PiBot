@@ -5,7 +5,7 @@
 #include "controllers/ProfileFollower.h"
 using namespace std;
 int main() {
-    robotInit();
+    robotInit(true, false, false);
     Drivetrain *drive = Drivetrain::getDrivetrain(); // start driving thread
 
     ProfileFollowerController* profile = new ProfileFollowerController();

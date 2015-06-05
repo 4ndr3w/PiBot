@@ -16,7 +16,7 @@ struct JoystickData
 
 
 int main() {
-    robotInit(true, false, false);
+    robotInit();
     Drivetrain *drive = Drivetrain::getDrivetrain(); // start driving thread
 
     int sock = socket(AF_INET, SOCK_DGRAM, 0);
@@ -34,11 +34,13 @@ int main() {
         JoystickData data;
         sockaddr src;
         socklen_t src_len = sizeof(src);
-        recv(sock, &data, sizeof(JoystickData), 0);
+        recvfrom(sock, &data, sizeof(JoystickData), 0, &src, &src_len);
 
         double f = (double)data.f/100.0;
         double s = (double)data.s/100.0;
-        double t = (double)data.t/100.0;
+        double t = -getAngle()*0.03;
+
+        //double t = (double)data.t/100.0;
 
         double angle = -getAngle();
         double cosA = cos(angle*(M_PI/180));
@@ -48,5 +50,8 @@ int main() {
 
         drive->drive(Rf,Rs,t);
 
+        int out[WIDTH][HEIGHT];
+        copyMap((int*)&out);
+        sendto(sock, (int*)&out, 50*50*sizeof(int), 0, &src, src_len);
     }
 }
